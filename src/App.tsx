@@ -42,7 +42,7 @@ function App() {
       </Router>
 
       <footer>
-        <p>Uriel Arellano</p>
+        <p>Uriel Arellano Sandoval</p>
         <a href="https://urielarellano.github.io/uriel-portfolio/" target="_blank" rel="noopener noreferrer">My website/portfolio</a>
         <a href="https://www.flaticon.com/free-icons/login" title="login icons" target="_blank" rel="noopener noreferrer">Login icons created by Freepik - Flaticon</a>
       </footer>
