@@ -6,17 +6,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 import Testimonial from '../components/Testimonial';
 import './Dashboard.css';
 import floria from '../assets/floria-elizabeth.png';
+import type { Review } from '../types/review';
 
-
-interface Review {
-    approved: boolean
-    image: string
-    name: string
-    bizName: string
-    service: string
-    stars: number
-    testimonial: string
-}
 
 // displayed when a user is signed in
 function Dashboard() {
@@ -41,6 +32,7 @@ function Dashboard() {
                     const querySnapshot = await getDocs(reviewsRef);
                     
                     const newReviews: Review[] = querySnapshot.docs.map((doc) => ({
+                        id: doc.id,
                         approved: false,
                         image: floria,
                         name: doc.data().name,
@@ -48,6 +40,7 @@ function Dashboard() {
                         service: doc.data().service,
                         stars: doc.data().stars,
                         testimonial: doc.data().testimonial,
+                        createdAt: doc.data().createdAt.toDate()
                     }));
 
                     setReviews((prev) => [...prev, ...newReviews]);
@@ -70,12 +63,7 @@ function Dashboard() {
             <div className="dashboard-reviews">
                 {reviews.map((currReview, i) => (
                     <Testimonial key={i}
-                        image={currReview.image}
-                        name={currReview.name}
-                        business={currReview.bizName}
-                        service={currReview.service}
-                        stars={currReview.stars}
-                        text={currReview.testimonial}
+                        review={currReview}
                     />
                 ))}
             </div>

@@ -19,6 +19,12 @@
   font-weight: bold;
 }
 
+.image-preview {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
 .review-form input,
 .review-form textarea {
   width: 100%;

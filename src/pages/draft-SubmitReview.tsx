@@ -2,12 +2,17 @@ import { useState } from "react";
 import { doc, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../services/firebase";
 
+import { resizeImage } from "../utils/resizeImage";
 import "./SubmitReview.css";
 
-function SubmitReview() {
-    const [rating, setRating] = useState<number>(0);
+const IMGUR_CLIENT_ID = "YOUR_IMGUR_CLIENT_ID"; // 👈 replace with your Imgur client ID
 
-    // grab user UID from URL
+function draftSubmitReview() {
+    const [rating, setRating] = useState<number>(0);
+    const [file, setFile] = useState<File | null>(null);
+    const [compressedBlob, setCompressedBlob] = useState<Blob | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
+
     const urlParts = window.location.pathname.split("/");
     const userUid = urlParts[urlParts.length - 1];
 
@@ -21,22 +26,45 @@ function SubmitReview() {
         const testimonial = (form.elements.namedItem("testimonial") as HTMLTextAreaElement).value.trim();
 
         try {
+            let imageUrl = "";
+
+            // upload to Imgur if user selected an image
+            if (compressedBlob) {
+                const formData = new FormData();
+                formData.append("image", compressedBlob);
+
+                const res = await fetch("https://api.imgur.com/3/image", {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Client-ID ${IMGUR_CLIENT_ID}`,
+                    },
+                    body: formData,
+                });
+
+                const data = await res.json();
+                if (data.success) imageUrl = data.data.link;
+                else console.error("Imgur upload failed", data);
+            }
+
             const reviewsRef = collection(doc(db, "users", userUid), "reviews");
 
             await addDoc(reviewsRef, {
-                approved: false,
-                image: "",
+                image: imageUrl, // optional
                 name,
                 business,
                 service,
                 stars: rating,
                 testimonial,
                 createdAt: serverTimestamp(),
+                approved: false,
             });
 
             console.log("Review submitted successfully!");
             form.reset();
             setRating(0);
+            setFile(null);
+            setCompressedBlob(null);
+            setPreview(null);
         } catch (err) {
             console.error("Error adding review:", err);
         }
@@ -46,6 +74,37 @@ function SubmitReview() {
         <div className="submit-review">
             <h2>Leave a Review</h2>
             <form className="review-form" onSubmit={handleSubmit}>
+                <label htmlFor="image">Profile Picture</label>
+                <input
+                    type="file"
+                    id="image"
+                    accept="image/*"
+                    onChange={async (e) => {
+                        const selected = e.target.files?.[0] || null;
+                        setFile(selected);
+
+                        if (selected) {
+                            try {
+                                const blob = await resizeImage(selected, 800, 800, 0.7);
+                                setCompressedBlob(blob);
+                                const previewUrl = URL.createObjectURL(blob);
+                                setPreview(previewUrl);
+                            } catch (err) {
+                                console.error("Error compressing preview:", err);
+                            }
+                        } else {
+                            setCompressedBlob(null);
+                            setPreview(null);
+                        }
+                    }}
+                />
+                {preview && (
+                    <div className="image-preview">
+                        <p>Image Preview (compressed):</p>
+                        <img src={preview} alt="Preview" style={{ maxWidth: "200px", borderRadius: "8px" }} />
+                    </div>
+                )}
+
                 <label htmlFor="name">Your Name</label>
                 <input type="text" id="name" name="name" placeholder="Enter your name" required />
 
@@ -84,4 +143,4 @@ function SubmitReview() {
     );
 }
 
-export default SubmitReview;
+export default draftSubmitReview;
