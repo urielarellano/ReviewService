@@ -1,11 +1,18 @@
-export async function resizeImage(file: File, maxWidth = 800, maxHeight = 800, quality = 0.7): Promise<Blob> {
+// usage: 
+// const newFile = resizeImage(oldFile, 500, 500, 0.8)
+
+export async function resizeImage(
+  file: File,
+  maxWidth = 600,
+  maxHeight = 600,
+  quality = 0.7
+): Promise<File> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const reader = new FileReader();
 
     reader.onload = (e) => {
       if (!e.target?.result) return reject("FileReader failed");
-
       img.src = e.target.result as string;
     };
 
@@ -31,7 +38,14 @@ export async function resizeImage(file: File, maxWidth = 800, maxHeight = 800, q
       canvas.toBlob(
         (blob) => {
           if (!blob) return reject("Canvas is empty");
-          resolve(blob);
+
+          // convert Blob → File
+          const resizedFile = new File([blob], file.name, {
+            type: "image/jpeg",
+            lastModified: Date.now(),
+          });
+
+          resolve(resizedFile);
         },
         "image/jpeg", // format
         quality // compression (0–1)
