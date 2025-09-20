@@ -5,7 +5,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 import Testimonial from '../components/Testimonial';
 import './Dashboard.css';
-import floria from '../assets/floria-elizabeth.png';
 import type { Review } from '../types/review';
 
 
@@ -34,7 +33,7 @@ function Dashboard() {
                     const newReviews: Review[] = querySnapshot.docs.map((doc) => ({
                         id: doc.id,
                         approved: false,
-                        image: floria,
+                        image: `https://res.cloudinary.com/duzgqrbqe/image/upload/v1758380695/${user.uid}_${doc.data().name}_${doc.data().service}`,
                         name: doc.data().name,
                         bizName: doc.data().business,
                         service: doc.data().service,
