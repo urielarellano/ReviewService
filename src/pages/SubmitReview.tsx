@@ -9,7 +9,6 @@ function SubmitReview() {
     const [rating, setRating] = useState<number>(0);
     const [previewUrl, setPreviewUrl] = useState("");
     const [formData, setFormData] = useState<FormData | null>(null);
-    // const [imageUrl, setImageUrl] = useState("");
 
     // grab user UID from URL
     const urlParts = window.location.pathname.split("/");

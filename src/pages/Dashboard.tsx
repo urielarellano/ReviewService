@@ -5,7 +5,6 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 import Testimonial from '../components/Testimonial';
 import './Dashboard.css';
-import floria from '../assets/floria-elizabeth.png';
 import type { Review } from '../types/review';
 
 
