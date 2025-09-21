@@ -23,6 +23,7 @@ function DashboardOuter({ view, setOuterView }: OuterProps) {
     const requestCopyRef = useRef<HTMLDivElement | null>(null);
     const location = window.location.href;
     const review: Review = {
+        uid: "",
         id: "",
         approved: false,
         image: floria,
