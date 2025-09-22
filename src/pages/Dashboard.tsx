@@ -18,6 +18,7 @@ function Dashboard() {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 const fetchUserInfo = async () => {
+                    const userId = user.uid;
                     const docRef = doc(db, 'users', user.uid);
                     
                     // set business
@@ -31,6 +32,7 @@ function Dashboard() {
                     const querySnapshot = await getDocs(reviewsRef);
                     
                     const newReviews: Review[] = querySnapshot.docs.map((doc) => ({
+                        uid: userId,
                         id: doc.id,
                         approved: false,
                         image: `https://res.cloudinary.com/duzgqrbqe/image/upload/v1758380695/${user.uid}_${doc.data().name}_${doc.data().service}`,
@@ -50,6 +52,11 @@ function Dashboard() {
         return () => unsubscribe(); // cleanup
     }, []);
 
+    // remove a review from the array upon deletion
+    const handleDeleteReview = (reviewId: string) => {
+        setReviews((prev) => prev.filter((r) => r.id !== reviewId));
+    };
+
 
     return (
         <>
@@ -63,6 +70,7 @@ function Dashboard() {
                 {reviews.map((currReview, i) => (
                     <Testimonial key={i}
                         review={currReview}
+                        onDelete={handleDeleteReview}
                     />
                 ))}
             </div>

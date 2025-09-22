@@ -1,4 +1,5 @@
 export interface Review {
+    uid: string
     id: string
     approved: boolean
     image: string
