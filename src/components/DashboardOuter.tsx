@@ -1,12 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import type { RefObject } from "react";
-
 import { auth } from "../services/firebase";
 import { onAuthStateChanged } from 'firebase/auth';
 
-import type { Review } from '../types/review';
-import Testimonial from './Testimonial';
-import floria from '../assets/floria-elizabeth.png';
+import WidgetTestimonial from './WidgetTestimonial';
+import './WidgetPreview.css';
 import './Outer.css';
 
 
@@ -22,17 +20,7 @@ function DashboardOuter({ view, setOuterView }: OuterProps) {
     const embedCopyRef = useRef<HTMLDivElement | null>(null);
     const requestCopyRef = useRef<HTMLDivElement | null>(null);
     const location = window.location.href;
-    const review: Review = {
-        id: "",
-        approved: false,
-        image: floria,
-        name: "Floria Elizabeth",
-        bizName: "Floria Flowers",
-        service: "Marketing Funnel Optimization",
-        stars: 5,
-        testimonial: "I cannot say enough good things about Arellano Advertising! They helped my flower business go from a smaller local store to a well-known regional flower business. The results spoke for themselves and the sales they produced more than justified the price. Highly recommended!",
-        createdAt: new Date()
-    }
+    
 
     // set requestUrl and uid
     useEffect(() => {
@@ -97,7 +85,12 @@ function DashboardOuter({ view, setOuterView }: OuterProps) {
                         <p className="close-modal-button" onClick={() => setOuterView(null)}>&#10006;</p>
                     </div>
                     <h3>Review Preview:</h3>
-                    <Testimonial review={ review }/>
+                    <div className="widget-preview">
+                        <WidgetTestimonial/>
+                        <WidgetTestimonial/>
+                        <WidgetTestimonial/>
+                        <WidgetTestimonial/>
+                    </div>
                     
                     <h3>Embed this code on your site:</h3>
                     <div className="code-embed">
