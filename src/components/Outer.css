@@ -14,7 +14,7 @@
 
 .signup-modal, .login-modal, .export-modal, .request-modal {
     position: fixed;
-    top: 5vh;
+    top: 3vh;
     height: fit-content;
     width: 90vw;
     border-radius: 5px;

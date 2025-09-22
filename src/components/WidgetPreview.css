@@ -1,0 +1,98 @@
+.widget-preview {
+    width: 100vw;
+    background: rgb(58, 57, 57);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 15px 10px;
+    gap: 12px;
+    overflow-x: auto;
+}
+
+/* testimonial container */
+.widget-testimonial {
+    background: #eee;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 2px;
+    padding: 15px 10px;
+    width: 40vw;
+    height: auto;
+}
+
+/* user info */
+.widget-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    width: 30%;
+    border-right: 1px solid black;
+}
+.widget-image {
+    border-radius: 50%;
+    height: 15vh;
+    width: 15vh;
+    margin-bottom: 5px;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: 0px 0px 1px rgb(0,0,0,.5);
+}
+
+/* testimonial info */
+.widget-testimonial-info {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 10px;
+}
+.widget-stars {
+    font-size: 22px;
+    color: rgb(255, 227, 11);
+    width: fit-content;
+    height: fit-content;
+    background: #eee;
+    padding: 0px 4px;
+    padding-bottom: 2px;
+    text-shadow: 0px 0px 2px black;
+}
+.widget-service {
+    background: #ccc;
+    padding: 3px 10px;
+}
+.widget-testimonial-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.widget-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* limit to 3 lines */
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.3s ease;
+    padding: 2px;
+}
+.widget-toggle {
+    padding: 1px 5px;
+    padding-bottom: 2px;
+    border-radius: 2px;
+    cursor: pointer;
+    align-self: center;
+    font-size: 14px;
+    transition: background .1s ease;
+}
+.widget-toggle:hover {
+    background: #ddd;
+}
+
+.expanded {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+    overflow: visible;
+}
