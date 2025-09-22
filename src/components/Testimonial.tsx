@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { db } from '../services/firebase';
 import { doc, deleteDoc } from 'firebase/firestore';
 import type { Review } from '../types/review';
+import { deleteCloudinaryImage } from '../utils/deleteCloudinaryImage';
 import './Testimonial.css';
 
 type TestimonialProps = {
@@ -14,6 +15,10 @@ const Testimonial = ({ review, onDelete }: TestimonialProps) => {
 
     async function deleteTestimonial() {
         try {
+            // delete image from Cloudinary
+            await deleteCloudinaryImage(`${review.uid}_${review.name}_${review.service}`);
+
+            // delete document on firebase
             const docRef = doc(db, "users", review.uid, "reviews", review.id);
             await deleteDoc(docRef);
             console.log("Testimonial deleted");

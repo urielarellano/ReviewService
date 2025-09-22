@@ -16,19 +16,9 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET!,
 });
 
-async function listImages() {
-  const res = await cloudinary.api.resources({
-    type: "upload",
-    resource_type: "image",
-    prefix: "Testimonial-images/", // prefix must match folder exactly
-  });
-  console.log(res.resources.map((r:any) => r.public_id));
-}
-
-listImages();
 
 // delete Testimonial-images image endpoint
-app.delete("/delete-image/:publicId", async (req, res) => {
+app.delete("/delete-cloudinary-image/:publicId", async (req, res) => {
   try {
     const { publicId } = req.params;
     const result = await cloudinary.uploader.destroy(publicId);
