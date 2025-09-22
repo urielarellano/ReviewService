@@ -1,4 +1,6 @@
+# =========================
 # Logs
+# =========================
 logs
 *.log
 npm-debug.log*
@@ -7,12 +9,32 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# =========================
+# Dependency directories
+# =========================
 node_modules
-dist
-dist-ssr
-*.local
 
+# =========================
+# Build outputs
+# =========================
+dist
+backend/dist
+.cache       # Vite cache
+.next        # Next.js cache (if ever used)
+out          # static exports
+*.tsbuildinfo
+
+# =========================
+# Local environment files
+# =========================
+.env
+.env.local
+.env.*.local
+!.env.example  # keep example files in repo
+
+# =========================
 # Editor directories and files
+# =========================
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,3 +44,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# =========================
+# Misc / Deployment
+# =========================
+*.lock-wscript
+.vite
+.vercel
+.now
+build/
+tmp/

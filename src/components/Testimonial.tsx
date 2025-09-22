@@ -13,11 +13,15 @@ const Testimonial = ({ review, onDelete }: TestimonialProps) => {
     const [expanded, setExpanded] = useState(false);
 
     async function deleteTestimonial() {
-        const docRef = doc(db, "users", review.uid, "reviews", review.id);
-        await deleteDoc(docRef);
-        console.log("Testimonial deleted");
+        try {
+            const docRef = doc(db, "users", review.uid, "reviews", review.id);
+            await deleteDoc(docRef);
+            console.log("Testimonial deleted");
 
-        if (onDelete) onDelete(review.id);
+            if (onDelete) onDelete(review.id);
+        } catch (err) {
+            console.error("Failed to copy text", err);
+        }
     }
 
     return (
