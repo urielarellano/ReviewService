@@ -1,63 +1,150 @@
 const container = document.querySelector('#reviewservice');
+const newDiv = document.createElement('div');
+newDiv.classList.add('widget-preview');
+container.appendChild(newDiv);
+
 const currentScript = document.currentScript;
 const uid = currentScript.dataset.id;
 
 const style = document.createElement('style');
 style.textContent = `
-    #reviewservice {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 auto;
-        gap: 10px;
-        padding: 5px;
-        max-width: 500px;
-    }
     .widget-preview {
+        width: 100vw;
+        background: rgb(58, 57, 57);
         display: flex;
         flex-direction: row;
-        gap: 5px;
-        border: 2px solid black;
-        border-radius: 3px;
-        padding: 10px;
-        width: 97%;
-    }
-    .user-info {
-        width: 40%;
-    }
-    .user-info img {
-        border-radius: 50%;
-        height: 13vh;
-        width: 13vh;
-        object-fit: cover;
-        object-position: center;
-        border: 3px solid rgb(155, 155, 155, 0.3);
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 4px 10px;
+        border-top: 9px solid rgb(58, 57, 57);
+        box-shadow: 0px 2px 5px rgb(0,0,0,0.6);
+        gap: 12px;
+        overflow-x: auto;
+        max-height: 63vh !important;
     }
 
-    .testimonial-info {
-        width: 60%;
+    /* testimonial container */
+    .widget-testimonial {
+        background: #eee;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border-radius: 2px;
+        padding: 15px 10px;
+        width: 500px;
+        height: auto;
+        font-size: 16px;
+        overflow: hidden;
     }
-    .testimonial {
-        border: 1px solid grey;
+
+    /* user info */
+    .widget-user-info {
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: left;
-        gap: 3px;
-        padding: 4px;
+        align-self: center;
+        width: 30%;
+        border-right: 1px solid black;
     }
-    .myText {
+    .widget-image {
+        border-radius: 50%;
+        height: 15vh;
+        width: 15vh;
+        margin-bottom: 5px;
+        object-fit: cover;
+        object-position: center;
+        box-shadow: 0px 0px 1px rgb(0,0,0,.5);
+    }
+
+    /* testimonial info */
+    .widget-testimonial-info {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5px 10px;
+    }
+    .widget-stars {
+        font-size: 22px;
+        color: rgb(255, 227, 11);
+        width: fit-content;
+        height: fit-content;
+        background: #eee;
+        padding: 0px 4px;
+        padding-bottom: 2px;
+        text-shadow: 0px 0px 2px black;
+    }
+    .widget-service {
+        background: #ccc;
+        padding: 3px 10px;
+    }
+    .widget-testimonial-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .widget-text {
         display: -webkit-box;
-        -webkit-line-clamp: 5; /* limit to 3 lines */
+        -webkit-line-clamp: 4; /* limit to 3 lines */
+        line-clamp: 4;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
         transition: all 0.3s ease;
         padding: 2px;
+        text-align: center;
     }
+    .widget-toggle {
+        padding: 1px 5px;
+        padding-bottom: 2px;
+        border-radius: 2px;
+        cursor: pointer;
+        align-self: center;
+        font-size: 14px;
+        transition: background .1s ease;
+    }
+    .widget-toggle:hover {
+        background: #ddd;
+    }
+
     .expanded {
         -webkit-line-clamp: unset;
+        line-clamp: unset;
         overflow: visible;
+    }
+
+    @media screen and (max-width: 1040px) {
+        .widget-testimonial {
+            width: 400px;
+            font-size: 14px;
+        }
+        .widget-toggle {
+            font-size: 14px;
+        }
+        .widget-image {
+            height: 13vh;
+            width: 13vh;
+        }
+    }
+
+    @media screen and (max-width: 450px) {
+        .widget-preview {
+            max-height: 50vh;
+            padding: 4px 13px;
+        }
+        .widget-testimonial {
+            width: 400px;
+            font-size: 13px;
+            padding: 8px 6px;
+        }
+        .widget-toggle {
+            font-size: 13px;
+        }
+
+        .widget-image {
+            height: 11vh;
+            width: 11vh;
+        }
     }
 `;
 document.head.appendChild(style);
@@ -101,6 +188,7 @@ document.head.appendChild(style);
         return starsString;
     }
 
+    
     try {
         const reviewsRef = db.collection('users').doc(uid).collection('reviews');
         const querySnapshot = await reviewsRef.get();
@@ -109,27 +197,26 @@ document.head.appendChild(style);
             container.innerHTML = `<p>No reviews yet.</p>`;
             return;
         }
-
+        
         querySnapshot.forEach(doc => {
             const data = doc.data();
+            // const html = `
+            //     <div class="widget-preview">
+            //         <div class="user-info">
+            //             <p class="name-preview"><strong>${data.name}</strong></p>
+            //             <p class="business-preview">${data.business}</p>
+            //         </div>
+            //         <div class="testimonial-info">
+            //             <p class="service-product"><strong>Service</strong>: ${data.service}</p>
+            //             <div class="stars">${getStars(data.stars)}</div>
+            //             <div class="testimonial">
+            //                 <p class="myText">${data.testimonial}</p>
+            //                 <button class="toggleButton">Show more</button>
+            //             </div>
+            //         </div>
+            //     </div>
+            // `;
             const html = `
-                <div class="widget-preview">
-                    <div class="user-info">
-                        <p class="name-preview"><strong>${data.name}</strong></p>
-                        <p class="business-preview">${data.business}</p>
-                    </div>
-                    <div class="testimonial-info">
-                        <p class="service-product"><strong>Service</strong>: ${data.service}</p>
-                        <div class="stars">${getStars(data.stars)}</div>
-                        <div class="testimonial">
-                            <p class="myText">${data.testimonial}</p>
-                            <button class="toggleButton">Show more</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            const htmltwo = `
-                <div class="widget-preview">
                     <div class="widget-testimonial">
                         <div class="widget-user-info">
                             <img class="widget-image" src=${data.image} alt=""/>
@@ -140,14 +227,13 @@ document.head.appendChild(style);
                             <div class="widget-stars">${getStars(data.stars)}</div>
                             <p class="widget-service"><u>Service</u>: ${data.service}</p>
                             <div class="widget-testimonial-text">
-                                <p class="widget-text">${data.text}</p>
+                                <p class="widget-text">${data.testimonial}</p>
                                 <div class="widget-toggle">Show more</div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `
-            container.innerHTML += html;
+            `;
+            container.querySelector('.widget-preview').innerHTML += html;
 
             document.querySelectorAll(".testimonial").forEach(testimonial => {
                 const button = testimonial.querySelector(".widget-toggle");
