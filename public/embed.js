@@ -128,11 +128,30 @@ document.head.appendChild(style);
                     </div>
                 </div>
             `;
+            const htmltwo = `
+                <div class="widget-preview">
+                    <div class="widget-testimonial">
+                        <div class="widget-user-info">
+                            <img class="widget-image" src=${data.image} alt=""/>
+                            <p class="widget-name"><strong>${data.name}</strong></p>
+                            <p class="widget-business">${data.business}</p>
+                        </div>
+                        <div class="widget-testimonial-info">
+                            <div class="widget-stars">${getStars(data.stars)}</div>
+                            <p class="widget-service"><u>Service</u>: ${data.service}</p>
+                            <div class="widget-testimonial-text">
+                                <p class="widget-text">${data.text}</p>
+                                <div class="widget-toggle">Show more</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
             container.innerHTML += html;
 
             document.querySelectorAll(".testimonial").forEach(testimonial => {
-                const button = testimonial.querySelector(".toggleButton");
-                const text = testimonial.querySelector(".myText");
+                const button = testimonial.querySelector(".widget-toggle");
+                const text = testimonial.querySelector(".widget-text");
 
                 button.addEventListener("click", () => {
                     text.classList.toggle("expanded");

@@ -28,6 +28,20 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  // toggle vertical scroll bar when outer is displayed
+  useEffect(() => {
+    if (view !== null) {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'auto'; // reset so normal scrolling works again
+    }
+
+    // cleanup just in case
+    return () => {
+      document.body.style.overflowY = 'auto';
+    };
+  }, [view]);
+
   return (
     <>
       { userLogged ? <DashboardHeader setOuterView={setView}/> : <Header setOuterView={setView}/> }
